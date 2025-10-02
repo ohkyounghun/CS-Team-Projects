@@ -23,9 +23,9 @@ float to_float(float_like_type *flt) {
 float get_largest_float() {
 	float_like_type flt;
 	
-	flt.sign = /* put the correct value here */;
-	flt.exp = /* put the correct value here */;
-	flt.frac = /* put the correct value here */;
+	flt.sign = 0; // 양수
+	flt.exp = 0xFE; // 254
+	flt.frac = 0x7FFFFF; // max fraction
 
 	return to_float(&flt);
 }
