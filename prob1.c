@@ -2,9 +2,9 @@
 #include <string.h>
 #include <math.h>
 
-#define SIGN_FIELD_BITS 1
-#define EXPONENT_FIELD_BITS 8
-#define FRACTION_FIELD_BITS 23
+#define SIGN_FIELD_BITS 1 // 비트 자릿수 정의 1자리
+#define EXPONENT_FIELD_BITS 8 // 비트 자릿수 정의 8자리
+#define FRACTION_FIELD_BITS 23 // 비트 자릿수 정의 23자리
 #define TYPE_BITS (SIGN_FIELD_BITS+EXPONENT_FIELD_BITS+FRACTION_FIELD_BITS)
 
 typedef struct {
@@ -23,9 +23,9 @@ float to_float(float_like_type *flt) {
 float get_largest_float() {
 	float_like_type flt;
 	
-	flt.sign = /* put the correct value here */;
-	flt.exp = /* put the correct value here */;
-	flt.frac = /* put the correct value here */;
+	flt.sign = 0; // 양수 (비트로 변환하면 0)
+	flt.exp = 0xFE; // 254 (비트로 변환하면 11111110)
+	flt.frac = 0x7FFFFF; // max fraction (비트로 변환하면 11111111111111111111111)
 
 	return to_float(&flt);
 }
