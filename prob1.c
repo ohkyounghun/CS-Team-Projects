@@ -18,7 +18,7 @@ float to_float(float_like_type *flt) {
 	float f;
 	memcpy(&f, flt, sizeof(f));
 	return f;
-}
+} // 원시비트 복사
 
 float get_largest_float() {
 	float_like_type flt;

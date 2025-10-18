@@ -115,7 +115,15 @@ void add(const my_type *a, const my_type *b, my_type *r) {
 
         /* 선행 0 제거 */
         strip0(A);
-        if (A[0] == '\0') strcpy(A, "0");
+
+        // [PATCH] 결과가 0일 때 –0 방지
+        if (A[0] == '\0' || (A[0]=='0' && A[1]=='\0')) {
+            strcpy(A, "0");
+            r->sign = 0;
+            r->exp  = (unsigned char)BIAS; // E=0
+            strcpy(r->frac.digits, A);
+            return;
+        }
 
         /* 결과 저장 */
         if (strlen(A) >= sizeof(r->frac.digits)) {
@@ -167,7 +175,13 @@ void add(const my_type *a, const my_type *b, my_type *r) {
 
     /* 선행 0 제거 */
     strip0(L);
-    if (L[0] == '\0') { strcpy(L, "0"); signL = 0; Emax = 0; }
+
+    // [PATCH] 결과가 0일 때 –0 방지
+    if (L[0] == '\0' || (L[0]=='0' && L[1]=='\0')) {
+        strcpy(L, "0");
+        signL = 0;
+        Emax  = 0;
+    }
 
     /* 결과 저장 */
     if (strlen(L) >= sizeof(r->frac.digits)) {
@@ -200,6 +214,12 @@ void sub(const my_type *a, const my_type *b, my_type *r) {
  *  - prob2의 print_value()를 그대로 재사용
  */
 int main(int argc, char **argv) {
+    // [PATCH] 인자 부족 체크
+    if (argc < 3) {
+        printf("Usage: %s <A> <B>\n", argv[0]);
+        return 0;
+    }
+
     my_type x, y, result;
     init_type(argv[1], &x);
     init_type(argv[2], &y);
@@ -209,12 +229,10 @@ int main(int argc, char **argv) {
     printf("%s + %s = ", argv[1], argv[2]);
     add(&x, &y, &result);
     print_value(&result);
-    printf("\n");
 
     printf("%s - %s = ", argv[1], argv[2]);
     sub(&x, &y, &result);
     print_value(&result);
-    printf("\n");
 
     return 0;
 }
